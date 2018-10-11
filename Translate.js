@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TextInput, Picker } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { Dropdown } from 'react-native-material-dropdown';
+
+const languages = [
+    { label: '한국어', value: 'kr' },
+    { label: '영어', value: 'en' },
+    { label: '일본어', value: 'jp' },
+    { label: '중국어', value: 'cn' },
+    { label: '베트남어', value: 'vi' },
+    { label: '인도네시아어', value: 'id' }
+];
 
 class Translate extends Component {
     constructor(props) {
@@ -8,7 +18,14 @@ class Translate extends Component {
         this.state = {
             placeholder: '번역 할 내용을 적으세요.(한글)',
             text: '',
-            result: ''
+            result: '',
+            target_lang: {
+                label: '한국어', value: 'kr'
+            },
+            src_lang: {
+                label: '영어', value: 'en'
+            },
+            log: ''
         };
     }
 
@@ -29,8 +46,8 @@ class Translate extends Component {
         };
         const data = {
             query: this.state.text,
-            src_lang: 'kr',
-            target_lang: 'en'
+            src_lang: this.state.src_lang.value,
+            target_lang: this.state.target_lang.value
         };
 
         const params = `?query=${data.query}&src_lang=${data.src_lang}&target_lang=${data.target_lang}`;
@@ -55,25 +72,58 @@ class Translate extends Component {
             });
     }
 
+    onChangeSrcLang(value) {
+        const src_lang = languages.find((l) => {
+            return l.value === value;
+        });
+
+        this.setState({
+            src_lang
+        });
+    }
+
+    onChangeTargetLang(value) {
+        const target_lang = languages.find((l) => {
+            return l.value === value;
+        });
+
+        this.setState({
+            target_lang
+        });
+    }
+
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.screen}>
                 <View style={styles.header}>
                     <Text style={styles.title}>Simple Translate</Text>
                 </View>
-                <View>
-                    <Text>언어선택</Text>
-                    <Text>언어선택</Text>
+                <View style={styles.container}>
+                    <View style={styles.language}>
+                        <Dropdown
+                            style={styles.dropdown}
+                            value={this.state.src_lang.label}
+                            onChangeText={this.onChangeSrcLang.bind(this)}
+                            data={languages}
+                        />
+                        <Dropdown
+                            style={styles.dropdown}
+                            value={this.state.target_lang.label}
+                            onChangeText={this.onChangeTargetLang.bind(this)}
+                            data={languages}
+                        />
+                    </View>
+                    <TextInput
+                            style={styles.translate_field}
+                            multiline={true}
+                            placeholder={this.state.placeholder}
+                            onChange={this.onPressLearnMore.bind(this)}
+                            onChangeText={(text) => this.setState({text})}
+                            value={this.state.text}
+                        />
+                    <Text style={styles.result}>{this.state.result}</Text>
                 </View>
-                <TextInput
-                        style={styles.translate_field}
-                        multiline={true}
-                        placeholder={this.state.placeholder}
-                        onChange={this.onPressLearnMore.bind(this)}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.state.text}
-                    />
-                <Text style={styles.result}>{this.state.result}</Text>
+                <Text>{this.state.log} log</Text>
             </View>
         );
     }
@@ -85,13 +135,16 @@ const colors = {
 };
 
 const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        backgroundColor: colors.yellow,
+        marginTop: 30
+    },
     container: {
         flex: 1,
-        flexDirection: 'column',
-        backgroundColor: colors.yellow,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 30
+        marginHorizontal: 4,
+        marginVertical: 8,
+        paddingHorizontal: 8
     },
     header: {
         backgroundColor: colors.bg,
@@ -103,6 +156,13 @@ const styles = StyleSheet.create({
         color: colors.yellow,
         fontWeight: 'bold',
         fontSize: 20
+    },
+    language: {
+        flexDirection: 'row'
+    },
+    dropdown: {
+        flex: 0,
+        width: '50%'
     },
     translate_field: {
         flex: 1,
