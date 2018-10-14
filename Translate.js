@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableHighlight, Select } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
 const languages = [
@@ -16,7 +16,7 @@ class Translate extends Component {
         super(props);
 
         this.state = {
-            placeholder: '번역 할 내용을 적으세요.(한글)',
+            placeholder: '번역할 내용을 입력해주세요.',
             text: '',
             result: '',
             src_lang: {
