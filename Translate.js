@@ -1,18 +1,34 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TextInput, Picker } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import { Dropdown } from 'react-native-material-dropdown';
+
+const languages = [
+    { label: '한국어', value: 'kr' },
+    { label: '영어', value: 'en' },
+    { label: '일본어', value: 'jp' },
+    { label: '중국어', value: 'cn' },
+    { label: '베트남어', value: 'vi' },
+    { label: '인도네시아어', value: 'id' }
+];
 
 class Translate extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            placeholder: '번역 할 내용을 적으세요.(한글)',
+            placeholder: '번역할 내용을 입력해주세요.',
             text: '',
-            result: ''
+            result: '',
+            src_lang: {
+                label: '영어', value: 'en'
+            },
+            target_lang: {
+                label: '한국어', value: 'kr'
+            }
         };
     }
 
-    onPressLearnMore() {
+    onPressTranslate() {
         if (this.state.text.length === 0) {
             this.setState({
                 result: ''
@@ -29,8 +45,8 @@ class Translate extends Component {
         };
         const data = {
             query: this.state.text,
-            src_lang: 'kr',
-            target_lang: 'en'
+            src_lang: this.state.src_lang.value,
+            target_lang: this.state.target_lang.value
         };
 
         const params = `?query=${data.query}&src_lang=${data.src_lang}&target_lang=${data.target_lang}`;
@@ -55,25 +71,85 @@ class Translate extends Component {
             });
     }
 
+    onPressSrcLang(value) {
+        let changeLang = 'kr';
+
+        if (value === changeLang) {
+            changeLang = this.state.src_lang.value;
+        }
+        this.onChangeTargetLang(changeLang);
+
+        this.onChangeSrcLang(value);
+    }
+
+    onChangeSrcLang(value) {
+        const src_lang = languages.find((l) => {
+            return l.value === value;
+        });
+
+        this.setState({
+            src_lang
+        });
+    }
+
+    onPressTargetLang(value) {
+        let changeLang = 'kr';
+
+        if (value === changeLang) {
+            changeLang = this.state.target_lang.value;
+        }
+        this.onChangeSrcLang(changeLang);
+
+        this.onChangeTargetLang(value);
+    }
+
+    onChangeTargetLang(value) {
+        const target_lang = languages.find((l) => {
+            return l.value === value;
+        });
+
+        this.setState({
+            target_lang
+        });
+    }
+
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.screen}>
                 <View style={styles.header}>
                     <Text style={styles.title}>Simple Translate</Text>
                 </View>
-                <View>
-                    <Text>언어선택</Text>
-                    <Text>언어선택</Text>
+                <View style={styles.container}>
+                    <View style={styles.language}>
+                        <Dropdown
+                            style={styles.dropdown}
+                            value={this.state.src_lang.label}
+                            onChangeText={this.onPressSrcLang.bind(this)}
+                            data={languages}
+                        />
+                        <Dropdown
+                            style={styles.dropdown}
+                            value={this.state.target_lang.label}
+                            onChangeText={this.onPressTargetLang.bind(this)}
+                            data={languages}
+                        />
+                    </View>
+                    <TextInput
+                            style={styles.translate_field}
+                            multiline={true}
+                            placeholder={this.state.placeholder}
+                            onChangeText={(text) => this.setState({text})}
+                            value={this.state.text}
+                        />
+                    <TouchableHighlight
+                        onPressIn={this.onPressTranslate.bind(this)}
+                    >
+                        <View style={styles.button}>
+                            <Text style={styles.txt}>번역</Text>
+                        </View>
+                    </TouchableHighlight>
+                    <Text style={styles.result}>{this.state.result}</Text>
                 </View>
-                <TextInput
-                        style={styles.translate_field}
-                        multiline={true}
-                        placeholder={this.state.placeholder}
-                        onChange={this.onPressLearnMore.bind(this)}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.state.text}
-                    />
-                <Text style={styles.result}>{this.state.result}</Text>
             </View>
         );
     }
@@ -85,13 +161,27 @@ const colors = {
 };
 
 const styles = StyleSheet.create({
+    button: {
+        width: '100%',
+        height: 30,
+        justifyContent: 'center',
+        backgroundColor: colors.bg
+    },
+    txt: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 18
+    },
+    screen: {
+        flex: 1,
+        backgroundColor: colors.yellow,
+        marginTop: 30
+    },
     container: {
         flex: 1,
-        flexDirection: 'column',
-        backgroundColor: colors.yellow,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 30
+        marginHorizontal: 4,
+        marginVertical: 8,
+        paddingHorizontal: 8
     },
     header: {
         backgroundColor: colors.bg,
@@ -103,6 +193,13 @@ const styles = StyleSheet.create({
         color: colors.yellow,
         fontWeight: 'bold',
         fontSize: 20
+    },
+    language: {
+        flexDirection: 'row'
+    },
+    dropdown: {
+        flex: 0,
+        width: '50%'
     },
     translate_field: {
         flex: 1,
