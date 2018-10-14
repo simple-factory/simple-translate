@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
 const languages = [
@@ -19,17 +19,16 @@ class Translate extends Component {
             placeholder: '번역 할 내용을 적으세요.(한글)',
             text: '',
             result: '',
-            target_lang: {
-                label: '한국어', value: 'kr'
-            },
             src_lang: {
                 label: '영어', value: 'en'
             },
-            log: ''
+            target_lang: {
+                label: '한국어', value: 'kr'
+            }
         };
     }
 
-    onPressLearnMore() {
+    onPressTranslate() {
         if (this.state.text.length === 0) {
             this.setState({
                 result: ''
@@ -72,6 +71,17 @@ class Translate extends Component {
             });
     }
 
+    onPressSrcLang(value) {
+        let changeLang = 'kr';
+
+        if (value === changeLang) {
+            changeLang = this.state.src_lang.value;
+        }
+        this.onChangeTargetLang(changeLang);
+
+        this.onChangeSrcLang(value);
+    }
+
     onChangeSrcLang(value) {
         const src_lang = languages.find((l) => {
             return l.value === value;
@@ -80,6 +90,17 @@ class Translate extends Component {
         this.setState({
             src_lang
         });
+    }
+
+    onPressTargetLang(value) {
+        let changeLang = 'kr';
+
+        if (value === changeLang) {
+            changeLang = this.state.target_lang.value;
+        }
+        this.onChangeSrcLang(changeLang);
+
+        this.onChangeTargetLang(value);
     }
 
     onChangeTargetLang(value) {
@@ -103,13 +124,13 @@ class Translate extends Component {
                         <Dropdown
                             style={styles.dropdown}
                             value={this.state.src_lang.label}
-                            onChangeText={this.onChangeSrcLang.bind(this)}
+                            onChangeText={this.onPressSrcLang.bind(this)}
                             data={languages}
                         />
                         <Dropdown
                             style={styles.dropdown}
                             value={this.state.target_lang.label}
-                            onChangeText={this.onChangeTargetLang.bind(this)}
+                            onChangeText={this.onPressTargetLang.bind(this)}
                             data={languages}
                         />
                     </View>
@@ -117,13 +138,18 @@ class Translate extends Component {
                             style={styles.translate_field}
                             multiline={true}
                             placeholder={this.state.placeholder}
-                            onChange={this.onPressLearnMore.bind(this)}
                             onChangeText={(text) => this.setState({text})}
                             value={this.state.text}
                         />
+                    <TouchableHighlight
+                        onPressIn={this.onPressTranslate.bind(this)}
+                    >
+                        <View style={styles.button}>
+                            <Text style={styles.txt}>번역</Text>
+                        </View>
+                    </TouchableHighlight>
                     <Text style={styles.result}>{this.state.result}</Text>
                 </View>
-                <Text>{this.state.log} log</Text>
             </View>
         );
     }
@@ -135,6 +161,17 @@ const colors = {
 };
 
 const styles = StyleSheet.create({
+    button: {
+        width: '100%',
+        height: 30,
+        justifyContent: 'center',
+        backgroundColor: colors.bg
+    },
+    txt: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 18
+    },
     screen: {
         flex: 1,
         backgroundColor: colors.yellow,
