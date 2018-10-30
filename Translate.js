@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
+
+import { Button } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 
 const languages = [
     { label: '한국어', value: 'kr' },
@@ -116,9 +119,6 @@ class Translate extends Component {
     render() {
         return (
             <View style={styles.screen}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Simple Translate</Text>
-                </View>
                 <View style={styles.container}>
                     <View style={styles.language}>
                         <Dropdown
@@ -135,18 +135,18 @@ class Translate extends Component {
                         />
                     </View>
                     <TextInput
-                            style={styles.translate_field}
-                            multiline={true}
-                            placeholder={this.state.placeholder}
-                            onChangeText={(text) => this.setState({text})}
-                            value={this.state.text}
-                        />
+                        mode="outlined"
+                        label={this.state.placeholder}
+                        style={styles.translate_field}
+                        multiline={true}
+                        onChangeText={(text) => this.setState({text})}
+                        value={this.state.text}
+                    />
                     <TouchableHighlight
+                        style={styles.button}
                         onPressIn={this.onPressTranslate.bind(this)}
                     >
-                        <View style={styles.button}>
-                            <Text style={styles.txt}>번역</Text>
-                        </View>
+                        <Button mode="contained">번역</Button>
                     </TouchableHighlight>
                     <Text style={styles.result}>{this.state.result}</Text>
                 </View>
@@ -156,16 +156,12 @@ class Translate extends Component {
 }
 
 const colors = {
-    yellow: '#FFDC00',
-    bg: '#3b3b3b'
+    bg: '#E6E6E6'
 };
 
 const styles = StyleSheet.create({
     button: {
-        width: '100%',
-        height: 30,
-        justifyContent: 'center',
-        backgroundColor: colors.bg
+        marginTop: 10
     },
     txt: {
         textAlign: 'center',
@@ -174,8 +170,7 @@ const styles = StyleSheet.create({
     },
     screen: {
         flex: 1,
-        backgroundColor: colors.yellow,
-        marginTop: 30
+        backgroundColor: 'white'
     },
     container: {
         flex: 1,
@@ -195,6 +190,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     language: {
+        marginTop: -30,
         flexDirection: 'row'
     },
     dropdown: {
@@ -213,13 +209,16 @@ const styles = StyleSheet.create({
     },
     result: {
         flex: 1,
-        width: '95%',
+        width: '100%',
+        marginTop: 10,
         minHeight: 100,
-        padding: 15,
-        margin: 10,
+        padding: 10,
         backgroundColor: colors.bg,
-        color: 'white',
-        fontSize: 18
+        color: '#424242',
+        fontSize: 18,
+        borderWidth: 1,
+        borderColor: '#6E6E6E',
+        borderStyle: 'dashed'
     }
 });
 
