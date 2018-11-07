@@ -161,26 +161,6 @@ class Translate extends Component {
                             disabled={true}
                         >{this.state.result}</TextInput>
                     </View>
-<<<<<<< HEAD
-
-                    <TextInput
-                        mode="outlined"
-                        label={this.state.placeholder}
-                        style={styles.translate_field}
-                        multiline={true}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.state.text}
-                    />
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPressIn={this.onPressTranslate.bind(this)}
-                    >
-                        <Button mode="contained">번역</Button>
-                    </TouchableHighlight>
-                    <Text style={styles.result}>{this.state.result}</Text>
-
-=======
->>>>>>> 4de45df7d656ffd7a1023cb196c9a44e961872a0
                 </View>
             </TouchableWithoutFeedback>
         );
