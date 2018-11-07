@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
-<<<<<<< HEAD
-import { StyleSheet, Text, ScrollView, View, TouchableHighlight } from 'react-native';
-=======
 import { StyleSheet, View, TouchableHighlight, TouchableWithoutFeedback, Keyboard } from 'react-native';
->>>>>>> 4de45df7d656ffd7a1023cb196c9a44e961872a0
 import { Dropdown } from 'react-native-material-dropdown';
 
 import { Button } from 'react-native-paper';
