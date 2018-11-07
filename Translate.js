@@ -5,6 +5,8 @@ import { Dropdown } from 'react-native-material-dropdown';
 import { Button } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
 
+import SplashScreen from 'react-native-splash-screen';
+
 const languages = [
     { label: '한국어', value: 'kr' },
     { label: '영어', value: 'en' },
@@ -31,6 +33,12 @@ class Translate extends Component {
         };
     }
 
+    componentDidMount() {
+    	// do stuff while splash screen is shown
+        // After having done stuff (such as async tasks) hide the splash screen
+        SplashScreen.hide();
+    }
+
     onPressTranslate() {
         Keyboard.dismiss();
 
@@ -55,7 +63,7 @@ class Translate extends Component {
         };
 
         const params = `?query=${data.query}&src_lang=${data.src_lang}&target_lang=${data.target_lang}`;
-        
+
         fetch(`${url}${params}`, {
                 method: 'get',
                 headers
@@ -63,7 +71,7 @@ class Translate extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 const result = responseJson.translated_text.map((r) => `${r[0]}`);
-                
+
                 this.setState({
                     result: result.join('\n')
                 });
