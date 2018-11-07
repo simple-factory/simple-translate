@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, ScrollView, View, TouchableHighlight } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
 import { Button } from 'react-native-paper';
@@ -134,6 +134,7 @@ class Translate extends Component {
                             data={languages}
                         />
                     </View>
+
                     <TextInput
                         mode="outlined"
                         label={this.state.placeholder}
@@ -149,6 +150,7 @@ class Translate extends Component {
                         <Button mode="contained">번역</Button>
                     </TouchableHighlight>
                     <Text style={styles.result}>{this.state.result}</Text>
+
                 </View>
             </View>
         );
