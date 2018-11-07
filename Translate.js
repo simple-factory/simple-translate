@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
+<<<<<<< HEAD
 import { StyleSheet, Text, ScrollView, View, TouchableHighlight } from 'react-native';
+=======
+import { StyleSheet, View, TouchableHighlight, TouchableWithoutFeedback, Keyboard } from 'react-native';
+>>>>>>> 4de45df7d656ffd7a1023cb196c9a44e961872a0
 import { Dropdown } from 'react-native-material-dropdown';
 
 import { Button } from 'react-native-paper';
@@ -32,6 +36,8 @@ class Translate extends Component {
     }
 
     onPressTranslate() {
+        Keyboard.dismiss();
+
         if (this.state.text.length === 0) {
             this.setState({
                 result: ''
@@ -118,22 +124,44 @@ class Translate extends Component {
 
     render() {
         return (
-            <View style={styles.screen}>
-                <View style={styles.container}>
-                    <View style={styles.language}>
-                        <Dropdown
-                            style={styles.dropdown}
-                            value={this.state.src_lang.label}
-                            onChangeText={this.onPressSrcLang.bind(this)}
-                            data={languages}
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={styles.screen}>
+                    <View style={styles.container}>
+                        <View style={styles.language}>
+                            <Dropdown
+                                style={styles.dropdown}
+                                value={this.state.src_lang.label}
+                                onChangeText={this.onPressSrcLang.bind(this)}
+                                data={languages}
+                            />
+                            <Dropdown
+                                style={styles.dropdown}
+                                value={this.state.target_lang.label}
+                                onChangeText={this.onPressTargetLang.bind(this)}
+                                data={languages}
+                            />
+                        </View>
+                        <TextInput
+                            mode='outlined'
+                            label={this.state.placeholder}
+                            style={styles.translate_field}
+                            multiline={true}
+                            onChangeText={(text) => this.setState({text})}
+                            value={this.state.text}
                         />
-                        <Dropdown
-                            style={styles.dropdown}
-                            value={this.state.target_lang.label}
-                            onChangeText={this.onPressTargetLang.bind(this)}
-                            data={languages}
-                        />
+                        <TouchableHighlight
+                            style={styles.button}
+                            onPressIn={this.onPressTranslate.bind(this)}
+                        >
+                            <Button mode="contained">번역</Button>
+                        </TouchableHighlight>
+                        <TextInput
+                            multiline={true}
+                            style={styles.result}
+                            disabled={true}
+                        >{this.state.result}</TextInput>
                     </View>
+<<<<<<< HEAD
 
                     <TextInput
                         mode="outlined"
@@ -151,8 +179,10 @@ class Translate extends Component {
                     </TouchableHighlight>
                     <Text style={styles.result}>{this.state.result}</Text>
 
+=======
+>>>>>>> 4de45df7d656ffd7a1023cb196c9a44e961872a0
                 </View>
-            </View>
+            </TouchableWithoutFeedback>
         );
     }
 }
@@ -219,8 +249,7 @@ const styles = StyleSheet.create({
         color: '#424242',
         fontSize: 18,
         borderWidth: 1,
-        borderColor: '#6E6E6E',
-        borderStyle: 'dashed'
+        borderColor: '#6E6E6E'
     }
 });
 
